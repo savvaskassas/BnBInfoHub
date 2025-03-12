@@ -1,110 +1,121 @@
-function openPopup(type) {
-    const popup = document.getElementById('popup');
-    const popupBody = document.getElementById('popup-body');
+let countdownInterval;
 
-    let content = '';
+// ========================
+// Check-In Flow
+// ========================
 
-    switch (type) {
-        case 'checkin':
-            content = `
-                <h2>Check-In</h2>
-                <p><strong>Ώρες:</strong> 15:00 - 20:00</p>
-                <p><strong>Check-Out:</strong> 10:00</p>
-                <h3>Επιλέξτε Ημερομηνία & Ώρα Άφιξης</h3>
-                <input type="datetime-local" id="arrival-time">
-                <button onclick="setUnlockTime()">Επιβεβαίωση</button>
-            `;
-            break;
-        case 'wifi':
-            content = `
-                <h2>WiFi</h2>
-                <p><strong>Όνομα Δικτύου:</strong> MyAirbnb</p>
-                <p><strong>Κωδικός:</strong> 12345678</p>
-                <button class="copy-btn" onclick="copyToClipboard('12345678')">Αντιγραφή</button>
-            `;
-            break;
-        case 'map':
-            content = `
-                <h2>Χάρτης</h2>
-                <p><strong>Διεύθυνση:</strong> Παράδεισος 123, Αθήνα</p>
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3145.123456789012!2d23.123456789012345!3d37.98765432109876!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzfCsDU5JzE1LjYiTiAyM8KwMDcnMzYuMCJF!5e0!3m2!1sel!2sgr!4v1234567890123!5m2!1sel!2sgr" width="100%" height="200" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
-            `;
-            break;
-        case 'other':
-            content = `
-                <h2>Άλλες Πληροφορίες</h2>
-                <ul>
-                    <li>Κουζίνα</li>
-                    <li>Πάρκινγκ</li>
-                    <li>Κλιματισμός</li>
-                </ul>
-            `;
-            break;
-        default:
-            content = '<p>Επιλέξτε ένα κουτάκι για περισσότερες πληροφορίες.</p>';
-    }
-
-    popupBody.innerHTML = content;
-    popup.classList.remove('hidden');
+function openCheckinForm() {
+    document.getElementById('formOverlay').style.display = 'block';
+    document.getElementById('arrivalTime').min = new Date().toISOString().slice(0, 16);
 }
 
-function closePopup() {
-    document.getElementById('popup').classList.add('hidden');
+function closeForm() {
+    document.getElementById('formOverlay').style.display = 'none';
 }
 
-function openCodePopup() {
-    document.getElementById("code-popup").classList.remove("hidden");
-}
+function confirmSubmission() {
+    const fullName = document.getElementById('fullName').value.trim();
+    const passportNumber = document.getElementById('passportNumber').value.trim();
+    const nationality = document.getElementById('nationality').value.trim();
+    const arrivalTime = document.getElementById('arrivalTime').value;
 
-function closeCodePopup() {
-    document.getElementById("code-popup").classList.add("hidden");
-}
-
-// Αντιγραφή WiFi στο πρόχειρο
-function copyToClipboard(text) {
-    navigator.clipboard.writeText(text);
-    alert("Αντιγράφηκε στο πρόχειρο: " + text);
-}
-
-// Ρύθμιση ώρας ξεκλειδώματος
-function setUnlockTime() {
-    const arrivalTimeInput = document.getElementById("arrival-time").value;
-    if (!arrivalTimeInput) {
-        alert("Παρακαλώ επιλέξτε ημερομηνία και ώρα άφιξης.");
+    if (!fullName || !passportNumber || !nationality || !arrivalTime) {
+        alert("Παρακαλώ συμπληρώστε όλα τα πεδία.");
         return;
     }
 
-    const arrivalTime = new Date(arrivalTimeInput);
-    const unlockTime = arrivalTime.getTime();
-    const lockTime = unlockTime + 3 * 60 * 60 * 1000;
+    document.getElementById('confirmationOverlay').style.display = 'block';
+}
 
-    const unlockBtn = document.getElementById("unlock-btn");
-    const timeUntilUnlock = unlockTime - Date.now();
+function editForm() {
+    document.getElementById('confirmationOverlay').style.display = 'none';
+}
 
-    if (timeUntilUnlock > 0) {
-        setTimeout(() => {
-            unlockBtn.disabled = false;
-            unlockBtn.textContent = "🔓 Δείτε τον Κωδικό";
-            unlockBtn.onclick = openCodePopup;
+function submitForm() {
+    const arrivalTime = new Date(document.getElementById('arrivalTime').value);
+    const now = new Date();
 
-            setTimeout(() => {
-                unlockBtn.disabled = true;
-                unlockBtn.textContent = "🔒 Κωδικός Κλειδιού";
-                unlockBtn.onclick = null;
-            }, lockTime - Date.now());
+    // Validation: 15:00 today - 14:59 tomorrow
+    const minTime = new Date(now.setHours(15, 0, 0, 0));
+    const maxTime = new Date(now.setDate(now.getDate() + 1));
+    maxTime.setHours(14, 59, 59, 999);
 
-        }, timeUntilUnlock);
-    } else {
-        unlockBtn.disabled = false;
-        unlockBtn.textContent = "🔓 Δείτε τον Κωδικό";
-        unlockBtn.onclick = openCodePopup;
-
-        setTimeout(() => {
-            unlockBtn.disabled = true;
-            unlockBtn.textContent = "🔒 Κωδικός Κλειδιού";
-            unlockBtn.onclick = null;
-        }, lockTime - Date.now());
+    if (arrivalTime < minTime || arrivalTime > maxTime) {
+        alert("Μη έγκυρη ώρα. Επιλέξτε μεταξύ 15:00 - 14:59.");
+        return;
     }
 
-    closePopup();
+    closeForm();
+    document.getElementById('confirmationOverlay').style.display = 'none';
+    document.getElementById('checkinBox').style.backgroundColor = '#28a745'; // Change to green
+    document.getElementById('checkinBox').onclick = function() {
+        document.getElementById('detailsOverlay').style.display = 'block';
+    };
+    startCountdown(arrivalTime);
 }
+
+// ========================
+// Countdown System
+// ========================
+
+function startCountdown(targetTime) {
+    const unlockTime = new Date(targetTime.getTime() - 1800000); // 30 λεπτά πριν
+
+    clearInterval(countdownInterval);
+
+    countdownInterval = setInterval(() => {
+        const now = new Date();
+        const diff = unlockTime - now;
+
+        if (diff <= 0) {
+            clearInterval(countdownInterval);
+            document.getElementById('countdown').innerHTML = "Ο κωδικός είναι έτοιμος! 🔓";
+            document.getElementById('lockerCode').classList.remove('hidden');
+            return;
+        }
+
+        const hours = Math.floor(diff / 3600000);
+        const minutes = Math.floor((diff % 3600000) / 60000);
+        document.getElementById('countdown').innerHTML =
+            `⌛ Κωδικός σε: ${hours} ώρες ${minutes} λεπτά`;
+    }, 1000);
+}
+
+// ========================
+// General Functions
+// ========================
+
+function closeDetails() {
+    document.getElementById('detailsOverlay').style.display = 'none';
+    document.getElementById('lockerCode').classList.add('hidden');
+    clearInterval(countdownInterval);
+}
+
+function showInfo(type) {
+    let content = '';
+    switch(type) {
+        case 'wifi':
+            content = '<h3>WiFi</h3><p>Network: Airbnb-Guest<br>Password: 12345678</p>';
+            break;
+        case 'map':
+            content = '<h3>Χάρτης</h3><iframe width="100%" height="300" src="https://maps.google.com/maps?q=Athens&output=embed"></iframe>';
+            break;
+        case 'other':
+            content = '<h3>Άλλες Πληροφορίες</h3><ul><li>Πάρκινγκ: 2 θέσεις</li><li>Κλιματισμός: Ναι</li><li>Πισίνα: Όχι</li></ul>';
+    }
+
+    document.getElementById('infoContent').innerHTML = content;
+    document.getElementById('infoOverlay').style.display = 'block';
+}
+
+function closeInfo() {
+    document.getElementById('infoOverlay').style.display = 'none';
+}
+
+// Close popups on overlay click
+window.onclick = function(event) {
+    if (event.target.className === 'popup-overlay') {
+        event.target.style.display = 'none';
+    }
+}
+

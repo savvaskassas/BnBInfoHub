@@ -3,49 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Στοιχεία Σπιτιού</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Airbnb Check-In</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        <div class="box" onclick="openPopup('checkin')">
+        <!-- Check-In Button -->
+        <div class="box" id="checkinBox" onclick="openCheckinForm()">
+            <i class="fas fa-calendar-check"></i>
             <span>Check-In</span>
         </div>
-        <div class="box" onclick="openPopup('wifi')">
-            <i class="fa-solid fa-wifi wifi-icon"></i>
+
+        <!-- Other Buttons -->
+        <div class="box" onclick="showInfo('wifi')">
+            <i class="fas fa-wifi"></i>
             <span>WiFi</span>
         </div>
-        <div class="box" onclick="openPopup('map')">
+        <div class="box" onclick="showInfo('map')">
+            <i class="fas fa-map-marked-alt"></i>
             <span>Χάρτης</span>
         </div>
-        <div class="box" onclick="openPopup('other')">
+        <div class="box" onclick="showInfo('other')">
+            <i class="fas fa-info-circle"></i>
             <span>Άλλα</span>
         </div>
     </div>
 
-    <!-- Popup Window -->
-    <div id="popup" class="popup hidden" onclick="closePopup()">
-        <div class="popup-content" onclick="event.stopPropagation()">
-            <span class="close-btn" onclick="closePopup()">&times;</span>
-            <div id="popup-body"></div>
+    <!-- Check-In Form Popup -->
+    <div class="popup-overlay" id="formOverlay">
+        <div class="popup">
+            <span class="close-btn" onclick="closeForm()">&times;</span>
+            <h2>Στοιχεία Check-In</h2>
+            <form id="checkinForm">
+                <input type="text" id="fullName" placeholder="Ονοματεπώνυμο" required>
+                <input type="text" id="passportNumber" placeholder="Αρ. Διαβατηρίου" required>
+                <input type="text" id="nationality" placeholder="Εθνικότητα" required>
+                <input type="datetime-local" id="arrivalTime" required>
+                <div class="button-group">
+                    <button type="button" onclick="confirmSubmission()">Υποβολή</button>
+                    <button type="button" onclick="closeForm()">Άκυρο</button>
+                </div>
+            </form>
         </div>
     </div>
 
-    <!-- Popup για τον κωδικό κλειδιού -->
-    <div id="code-popup" class="popup hidden" onclick="closeCodePopup()">
-        <div class="popup-content" onclick="event.stopPropagation()">
-            <span class="close-btn" onclick="closeCodePopup()">&times;</span>
-            <h2>Κωδικός Κλειδιού</h2>
-            <p><strong>Ο κωδικός σας είναι:</strong></p>
-            <p id="code-display" class="code-text">1234</p>
-            <button class="copy-btn" onclick="copyToClipboard('1234')">Αντιγραφή</button>
+    <!-- Confirmation Popup -->
+    <div class="popup-overlay" id="confirmationOverlay">
+        <div class="popup">
+            <h2>Επιβεβαίωση</h2>
+            <p>Είστε σίγουροι ότι θέλετε να προχωρήσετε;</p>
+            <div class="button-group">
+                <button type="button" onclick="submitForm()">Yes</button>
+                <button type="button" onclick="editForm()">Make Changes</button>
+            </div>
         </div>
     </div>
 
-    <!-- Κουμπί για ξεκλείδωμα κωδικού -->
-    <div class="container">
-        <button id="unlock-btn" class="locked" disabled>🔒 Κωδικός Κλειδιού</button>
+    <!-- Check-In Details Popup -->
+    <div class="popup-overlay" id="detailsOverlay">
+        <div class="popup">
+            <span class="close-btn" onclick="closeDetails()">&times;</span>
+            <h2>Πρόσβαση στο Σπίτι</h2>
+            <div class="image-grid">
+                <img src="door.jpg" alt="Εξώπορτα">
+                <img src="locker.jpg" alt="Locker">
+            </div>
+            <div class="house-info">
+                <p><strong>Διεύθυνση:</strong> Οδός Παράδεισος 123, Αθήνα</p>
+                <p><strong>Περιγραφή:</strong> Όμορφο διαμέρισμα με όλες τις ανέσεις...</p>
+            </div>
+            <div class="countdown-box">
+                <div id="countdown"></div>
+                <div id="lockerCode" class="hidden">Κωδικός: <span>1234</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Info Popup -->
+    <div class="popup-overlay" id="infoOverlay">
+        <div class="popup">
+            <span class="close-btn" onclick="closeInfo()">&times;</span>
+            <div id="infoContent"></div>
+        </div>
     </div>
 
     <script src="script.js"></script>
