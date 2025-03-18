@@ -6,159 +6,90 @@
     <title>Airbnb Check-In</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
-
-    <!-- Δυναμική επιλογή API Key ανάλογα με τη συσκευή -->
-    <script>
-        function getAPIKey() {
-            var userAgent = navigator.userAgent || navigator.vendor || window.opera;
-
-            // Αν είναι iOS (iPhone, iPad)
-            if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-                return "AIzaSyAD_a0tYAiju4et2NO46uPi3Xcs3zT6QuY"; // iOS API Key
-            } 
-            // Αν είναι Android
-            else if (/android/i.test(userAgent)) {
-                return "AIzaSyAYdj8Xpf107n7YXvHOQfa0DHJ-TF83OYE"; // Android API Key
-            } 
-            // Αν είναι Υπολογιστής (ή άλλη συσκευή)
-            else {
-                return "AIzaSyBFZpKomltfnV6zmBq5NXbz_ncW7N0pNyY"; // JavaScript API Key
-            }
-        }
-
-        var apiKey = getAPIKey();
-        var script = document.createElement("script");
-        script.src = "https://maps.googleapis.com/maps/api/js?key=" + apiKey + "&callback=initMap";
-        script.async = true;
-        script.defer = true;
-        document.head.appendChild(script);
-    </script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 </head>
 <body>
+
     <div class="container">
-        <!-- Check-In Button -->
-        <div class="box" id="checkinBox" onclick="openCheckinForm()">
-            <i class="fas fa-calendar-check"></i>
-            <span>Check-In</span>
+        <!-- Πρώτη σειρά κουμπιών -->
+        <div class="button-row">
+            <div class="box" id="checkinBox" onclick="openCheckinForm()">
+                <i class="fas fa-calendar-check"></i>
+                <span>Check-In</span>
+            </div>
+            <div class="box" onclick="showInfo('wifi')">
+                <i class="fas fa-wifi"></i>
+                <span>WiFi</span>
+            </div>
         </div>
 
-        <!-- Other Buttons -->
-        <div class="box" onclick="showInfo('wifi')">
-            <i class="fas fa-wifi"></i>
-            <span>WiFi</span>
-        </div>
-        <div class="box" onclick="showInfo('map')">
-            <i class="fas fa-map-marked-alt"></i>
-            <span>Χάρτης</span>
-        </div>
-        <div class="box" onclick="showInfo('other')">
-            <i class="fas fa-info-circle"></i>
-            <span>Άλλα</span>
+        <!-- Δεύτερη σειρά κουμπιών -->
+        <div class="button-row">
+            <div class="box" onclick="showInfo('map')">
+                <i class="fas fa-map-marked-alt"></i>
+                <span>Χάρτης</span>
+            </div>
+            <div class="box" onclick="showInfo('other')">
+                <i class="fas fa-info-circle"></i>
+                <span>Άλλα</span>
+            </div>
         </div>
     </div>
 
-    <!-- Check-In Form Popup -->
+    <!-- Νέο κουμπί κάτω αριστερά (Viber) -->
+    <div class="bottom-left-button" onclick="openViber()">
+        <i class="fas fa-phone"></i>
+    </div>
+
+    <!-- Νέο κουμπί κάτω δεξιά (WhatsApp) -->
+    <div class="bottom-right-button" onclick="openWhatsApp()">
+        <i class="fab fa-whatsapp"></i>
+    </div>
+
+    <!-- Modal Φόρμα Check-In -->
     <div class="popup-overlay" id="formOverlay">
-        <div class="popup">
+        <div class="form-container">
             <span class="close-btn" onclick="closeForm()">&times;</span>
             <h2>Στοιχεία Check-In</h2>
             <form id="checkinForm">
-                <input type="text" id="fullName" placeholder="Ονοματεπώνυμο" required>
-                <input type="text" id="passportNumber" placeholder="Αρ. Διαβατηρίου" required>
-                <input type="text" id="nationality" placeholder="Εθνικότητα" required>
-                <input type="datetime-local" id="arrivalTime" required>
-                <div class="button-group">
-                    <button type="button" onclick="confirmSubmission()">Υποβολή</button>
+                <div class="form-group">
+                    <label for="fullName">Ονοματεπώνυμο</label>
+                    <input type="text" id="fullName" name="fullName" placeholder="Π.χ. Ιωάννης Παπαδόπουλος" required>
+                </div>
+                <div class="form-group">
+                    <label for="passportNumber">Αριθμός Διαβατηρίου</label>
+                    <input type="text" id="passportNumber" name="passportNumber" placeholder="Π.χ. ΑΒ1234567" required>
+                </div>
+                <div class="form-group">
+                    <label for="nationality">Εθνικότητα</label>
+                    <input type="text" id="nationality" name="nationality" placeholder="Π.χ. Ελληνική" required>
+                </div>
+                <div class="form-group">
+                    <label for="arrivalTime">Ημερομηνία & Ώρα Άφιξης</label>
+                    <input type="datetime-local" id="arrivalTime" name="arrivalTime" required>
+                </div>
+                <div class="form-actions">
+                    <button type="submit">Υποβολή</button>
                     <button type="button" onclick="closeForm()">Άκυρο</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- Confirmation Popup -->
-    <div class="popup-overlay" id="confirmationOverlay">
+    <!-- Popup Επιβεβαίωσης -->
+    <div id="confirmationOverlay" class="popup-overlay">
         <div class="popup">
-            <h2>Επιβεβαίωση</h2>
+            <h3>Επιβεβαίωση Check-In</h3>
             <p>Είστε σίγουροι ότι θέλετε να προχωρήσετε;</p>
-            <div class="button-group">
-                <button type="button" onclick="submitForm()">Yes</button>
-                <button type="button" onclick="editForm()">Make Changes</button>
+            <div class="form-actions">
+                <button id="confirmButton" type="button">Επιβεβαίωση</button>
+                <button id="cancelButton" type="button">Άκυρο</button>
             </div>
         </div>
     </div>
 
-    <!-- Check-In Details Popup -->
-    <div class="popup-overlay" id="detailsOverlay">
-        <div class="popup">
-            <span class="close-btn" onclick="closeDetails()">&times;</span>
-            <h2>Πρόσβαση στο Σπίτι</h2>
-            <div class="image-grid">
-                <img src="door.jpg" alt="Εξώπορτα">
-                <img src="locker.jpg" alt="Locker">
-            </div>
-            <div class="house-info">
-                <p><strong>Διεύθυνση:</strong> Εθναρχου Μακαρίου 37, Ρόδος</p>
-                <p><strong>Περιγραφή:</strong> Όμορφο διαμέρισμα με όλες τις ανέσεις...</p>
-            </div>
-            <div class="countdown-box">
-                <div id="countdown"></div>
-                <div id="lockerCode" class="hidden">Κωδικός: <span>1234</span></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Info Popup -->
-    <div class="popup-overlay" id="infoOverlay">
-        <div class="popup">
-            <span class="close-btn" onclick="closeInfo()">&times;</span>
-            <div id="infoContent"></div>
-        </div>
-    </div>
-
-    <!-- Google Maps -->
-    <div id="map" style="width: 100%; height: 300px; display: none;"></div>
-
-    <script>
-        function showInfo(type) {
-            let content = '';
-            switch(type) {
-                case 'wifi':
-                    content = '<h3>WiFi</h3><p>Δίκτυο: Airbnb-Guest<br>Κωδικός: 12345678</p>';
-                    break;
-                case 'map':
-                    document.getElementById("map").style.display = "block";
-                    initMap();
-                    return;
-                case 'other':
-                    content = '<h3>Άλλες Πληροφορίες</h3><ul><li>Πάρκινγκ: 2 θέσεις</li><li>Κλιματισμός: Ναι</li><li>Πισίνα: Όχι</li></ul>';
-                    break;
-            }
-            document.getElementById('infoContent').innerHTML = content;
-            document.getElementById('infoOverlay').style.display = 'block';
-        }
-
-        function initMap() {
-            var location = { lat: 36.448105, lng: 28.223146 };
-            var map = new google.maps.Map(document.getElementById("map"), {
-                zoom: 16,
-                center: location
-            });
-            var marker = new google.maps.Marker({
-                position: location,
-                map: map
-            });
-        }
-
-        function closeInfo() {
-            document.getElementById('infoOverlay').style.display = 'none';
-        }
-
-        window.onclick = function(event) {
-            if (event.target.className === 'popup-overlay') {
-                event.target.style.display = 'none';
-            }
-        }
-    </script>
+    <script src="script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
 </body>
 </html>
