@@ -317,3 +317,111 @@ button[type="button"]:hover {
     min-width: 140px;
     text-align: center;
 }
+
+/* Στυλ για το κουμπί του Χάρτη */
+#mapBtn {
+  background-color: #ff5a5f; /* Κόκκινο Airbnb */
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 12px 20px;
+  margin: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+#mapBtn:hover {
+  background-color: #e04e50;
+  transform: translateY(-2px);
+}
+#mapBtn:active {
+  transform: scale(0.98);
+}
+
+/* Στυλ για το overlay του Χάρτη (modal) */
+#mapModal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+/* Όταν το modal είναι ενεργό */
+#mapModal.show {
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Στυλ για το περιεχόμενο του modal */
+#mapModal .modal-content {
+  background: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  max-width: 500px;
+  width: 90%;
+  margin: 100px auto;
+  position: relative;
+  transform: translateY(-20px);
+  transition: transform 0.3s ease;
+}
+#mapModal.show .modal-content {
+  transform: translateY(0);
+}
+
+/* Κουμπί κλεισίματος */
+#mapModal .close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 28px;
+  font-weight: bold;
+  color: #333;
+  cursor: pointer;
+}
+#mapModal .close:hover {
+  color: #000;
+}
+
+/* Στυλ για το iframe του Google Maps */
+#mapModal iframe {
+  width: 100%;
+  border: none;
+  border-radius: 5px;
+  margin: 10px 0;
+}
+
+/* Στυλ για το κουμπί Οδηγίες */
+#directionsBtn {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+#directionsBtn:hover {
+  background-color: #0056b3;
+}
+
+/* Responsive design */
+@media (max-width: 600px) {
+  #mapBtn {
+    font-size: 14px;
+    padding: 10px 16px;
+  }
+  #mapModal .modal-content {
+    margin: 50px auto;
+    width: 95%;
+  }
+}
+

@@ -130,3 +130,49 @@ window.onclick = function(event) {
     }
 };
 
+// Επιλογή στοιχείων από το DOM
+const mapBtn       = document.getElementById('mapBtn');
+const mapModal     = document.getElementById('mapModal');
+const directionsBtn = document.getElementById('directionsBtn');
+const closeButtons = mapModal.querySelector('.close');
+
+// Συναρτήσεις για άνοιγμα και κλείσιμο του Χάρτη
+function openMapModal() {
+  mapModal.classList.add('show');
+}
+function closeMapModal() {
+  mapModal.classList.remove('show');
+}
+
+// Άνοιγμα του modal όταν πατηθεί το κουμπί "Χάρτης"
+mapBtn.addEventListener('click', openMapModal);
+
+// Κλείσιμο modal όταν πατηθεί το "X"
+closeButtons.addEventListener('click', closeMapModal);
+
+// Κλείσιμο όταν γίνει κλικ εκτός του modal
+mapModal.addEventListener('click', (e) => {
+  if (e.target === mapModal) {
+    closeMapModal();
+  }
+});
+
+// Λειτουργία για το κουμπί "Οδηγίες Πλοήγησης"
+directionsBtn.addEventListener('click', () => {
+  // Προσπάθεια λήψης τοποθεσίας του χρήστη
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(position => {
+      const lat = position.coords.latitude;
+      const lon = position.coords.longitude;
+      // Άνοιγμα Google Maps με οδηγίες από την τρέχουσα τοποθεσία προς την καθορισμένη διεύθυνση
+      window.open(`https://www.google.com/maps/dir/?api=1&origin=${lat},${lon}&destination=Acropolis%2C+Athens`);
+    }, () => {
+      // Αν δεν επιτραπεί η τοποθεσία, ανοίγει απλά ο χάρτης για τον προορισμό
+      window.open(`https://www.google.com/maps/search/Acropolis,+Athens`);
+    });
+  } else {
+    // Αν η γεωτοποθεσία δεν υποστηρίζεται, ανοίγει απλά ο χάρτης
+    window.open(`https://www.google.com/maps/search/Acropolis,+Athens`);
+  }
+});
+
