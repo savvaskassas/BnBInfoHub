@@ -164,15 +164,15 @@ directionsBtn.addEventListener('click', () => {
     navigator.geolocation.getCurrentPosition(position => {
       const lat = position.coords.latitude;
       const lon = position.coords.longitude;
-      // Άνοιγμα Google Maps με οδηγίες από την τρέχουσα τοποθεσία προς την καθορισμένη διεύθυνση
-      window.open(`https://www.google.com/maps/dir/?api=1&origin=${lat},${lon}&destination=Acropolis%2C+Athens`);
+      // Άνοιγμα Google Maps με οδηγίες από την τρέχουσα τοποθεσία προς το Σύνταγμα, Αθήνα
+      window.open(`https://www.google.com/maps/dir/?api=1&origin=${lat},${lon}&destination=Σύνταγμα,+Αθήνα`);
     }, () => {
       // Αν δεν επιτραπεί η τοποθεσία, ανοίγει απλά ο χάρτης για τον προορισμό
-      window.open(`https://www.google.com/maps/search/Acropolis,+Athens`);
+      window.open(`https://www.google.com/maps/dir/?api=1&destination=Σύνταγμα,+Αθήνα`);
     });
   } else {
-    // Αν η γεωτοποθεσία δεν υποστηρίζεται, ανοίγει απλά ο χάρτης
-    window.open(`https://www.google.com/maps/search/Acropolis,+Athens`);
+    // Αν η γεωτοποθεσία δεν υποστηρίζεται, ανοίγει απλά ο χάρτης με τον προορισμό
+    window.open(`https://www.google.com/maps/dir/?api=1&destination=Σύνταγμα,+Αθήνα`);
   }
 });
 
