@@ -176,3 +176,37 @@ directionsBtn.addEventListener('click', () => {
   }
 });
 
+// ==========================
+// ΛΕΙΤΟΥΡΓΙΑ MODAL WIFI
+// ==========================
+
+const wifiOverlay = document.getElementById("wifiOverlay");
+const wifiPasswordInput = document.getElementById("wifiPassword");
+const copyWifiBtn = document.getElementById("copyWifiBtn");
+
+// Άνοιγμα όταν πατηθεί το κουμπί WiFi
+function showInfo(type) {
+    if (type === "wifi") {
+        wifiOverlay.classList.add("show");
+    }
+}
+
+// Κλείσιμο WiFi Modal
+function closeWifiForm() {
+    wifiOverlay.classList.remove("show");
+}
+
+// Αντιγραφή WiFi Κωδικού
+copyWifiBtn.addEventListener("click", () => {
+    navigator.clipboard.writeText(wifiPasswordInput.value)
+        .then(() => {
+            copyWifiBtn.textContent = "Αντιγράφηκε!";
+            setTimeout(() => {
+                copyWifiBtn.textContent = "Αντιγραφή";
+            }, 2000);
+        })
+        .catch(err => {
+            console.error("Σφάλμα αντιγραφής: ", err);
+        });
+});
+

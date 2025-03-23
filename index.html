@@ -106,7 +106,29 @@
             </div>
         </div>
     </div>
+    <!-- Modal για WiFi -->
+<div class="popup-overlay" id="wifiOverlay">
+    <div class="form-container">
+        <span class="close-btn" onclick="closeWifiForm()">&times;</span>
+        <h2>Στοιχεία WiFi</h2>
+        <form id="wifiForm">
+            <div class="form-group">
+                <label for="wifiName">Όνομα Δικτύου</label>
+                <input type="text" id="wifiName" name="wifiName" value="MyAirbnbWiFi" readonly>
+            </div>
+            <div class="form-group">
+                <label for="wifiPassword">Κωδικός</label>
+                <input type="text" id="wifiPassword" name="wifiPassword" value="abcd1234" readonly>
+                <button type="button" id="copyWifiBtn">Αντιγραφή</button>
+            </div>
+            <div class="form-actions">
+                <button type="button" onclick="closeWifiForm()">Κλείσιμο</button>
+            </div>
+        </form>
+    </div>
+</div>
 
+    
     <script src="script.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
