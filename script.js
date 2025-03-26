@@ -210,3 +210,22 @@ copyWifiBtn.addEventListener("click", () => {
         });
 });
 
+// ==========================
+// ΛΕΙΤΟΥΡΓΙΑ MODAL ΓΙΑ ΑΛΛΕΣ ΠΛΗΡΟΦΟΡΙΕΣ
+// ==========================
+
+const infoOverlay = document.getElementById("infoOverlay");
+
+// Άνοιγμα όταν πατηθεί το κουμπί "Άλλα"
+function showInfo(type) {
+    if (type === "other") {
+        infoOverlay.classList.add("show");
+    } else if (type === "wifi") {
+        wifiOverlay.classList.add("show");
+    }
+}
+
+// Κλείσιμο του modal πληροφοριών
+function closeInfoForm() {
+    infoOverlay.classList.remove("show");
+}

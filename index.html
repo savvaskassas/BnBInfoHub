@@ -127,6 +127,28 @@
         </form>
     </div>
 </div>
+       <!-- Modal για Άλλες Πληροφορίες -->
+<div class="popup-overlay" id="infoOverlay">
+    <div class="form-container">
+        <span class="close-btn" onclick="closeInfoForm()">&times;</span>
+        <h2>Άλλες Πληροφορίες</h2>
+        <div class="form-group">
+            <p><strong>Ώρα Check-out:</strong> 11:00 πμ</p>
+        </div>
+        <div class="form-group">
+            <p><strong>Κανόνες Διαμονής:</strong></p>
+            <ul>
+                <li>Απαγορεύεται το κάπνισμα.</li>
+                <li>Δεν επιτρέπονται πάρτι.</li>
+                <li>Ώρα ησυχίας: 22:00 - 08:00.</li>
+            </ul>
+        </div>
+        <div class="form-actions">
+            <button type="button" onclick="closeInfoForm()">Κλείσιμο</button>
+        </div>
+    </div>
+</div>
+
 
     
     <script src="script.js"></script>
@@ -134,3 +156,4 @@
 
 </body>
 </html>
+
