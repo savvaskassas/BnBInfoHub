@@ -28,19 +28,19 @@ body {
 
 /* ======= Κουμπιά ======= */
 .box {
-    background: #007bff;
+    background: #ff5a5f; /* Airbnb κόκκινο */
     color: white;
     padding: 12px;
     border-radius: 10px;
     cursor: pointer;
     text-align: center;
     font-size: 16px;
-    transition: transform 0.2s;
+    transition: background-color 0.3s, transform 0.2s;
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 120px; /* Μικρότερο πλάτος */
-    height: 50px; /* Μικρότερο ύψος */
+    width: 120px;
+    height: 50px;
 }
 
 .box i {
@@ -48,8 +48,10 @@ body {
 }
 
 .box:hover {
+    background-color: #e04e50;
     transform: translateY(-3px);
 }
+
 
 /* ======= Κουμπιά Viber και WhatsApp ======= */
 .bottom-left-button,
@@ -536,3 +538,4 @@ button[type="button"]:hover {
     justify-content: flex-end;
     margin-top: 20px;
 }
+
