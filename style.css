@@ -15,7 +15,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 30px; /* Απόσταση μεταξύ των σειρών */
+    gap: 30px;
     padding: 20px;
 }
 
@@ -23,14 +23,14 @@ body {
 .button-row {
     display: flex;
     justify-content: center;
-    gap: 30px; /* Απόσταση μεταξύ των κουμπιών */
+    gap: 30px;
 }
 
 /* ======= Κουμπιά ======= */
 .box {
-    background: #ff5a5f; /* Airbnb κόκκινο */
+    background: #ff5a5f; /* Κόκκινο Airbnb */
     color: white;
-    padding: 12px;
+    padding: 12px 16px;
     border-radius: 10px;
     cursor: pointer;
     text-align: center;
@@ -39,19 +39,20 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 120px;
-    height: 50px;
+    width: 140px;
+    height: 55px;
+    box-sizing: border-box;
 }
 
 .box i {
-    margin-right: 6px;
+    margin-right: 8px;
+    font-size: 18px;
 }
 
 .box:hover {
     background-color: #e04e50;
     transform: translateY(-3px);
 }
-
 
 /* ======= Κουμπιά Viber και WhatsApp ======= */
 .bottom-left-button,
@@ -71,7 +72,6 @@ body {
     transition: background-color 0.3s ease;
 }
 
-/* Viber κουμπί */
 .bottom-left-button {
     left: 20px;
     background-color: #250366;
@@ -81,7 +81,6 @@ body {
     background-color: #3a058c;
 }
 
-/* WhatsApp κουμπί */
 .bottom-right-button {
     right: 20px;
     background-color: #1da851;
@@ -91,69 +90,76 @@ body {
     background-color: #128c5e;
 }
 
-/* ======= Προσαρμογή του overlay (background) για καλύτερη ορατότητα ======= */
-.popup-overlay {
+/* ======= Popups και Modals (WiFi, Info, Χάρτης, Check-In) ======= */
+.popup-overlay,
+#wifiOverlay,
+#infoOverlay,
+#mapModal {
     display: none;
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.6); /* Πιο σκοτεινό background */
-    z-index: 1000;
-    display: flex;
+    background: rgba(0, 0, 0, 0.5);
     justify-content: center;
     align-items: center;
-    overflow-y: auto; /* Ενεργοποίηση scroll αν η οθόνη είναι μικρή */
+    z-index: 1000;
     opacity: 0;
     transition: opacity 0.3s ease-in-out;
 }
 
-/* Κύριο παράθυρο */
-.popup {
-    background: white;
-    width: 90%;
-    max-width: 450px;
-    padding: 25px;
-    border-radius: 12px;
-    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.2);
-    transform: scale(0.9);
-    transition: transform 0.3s ease-in-out;
-}
-
-/* Όταν ανοίγει η φόρμα */
-.popup-overlay.show {
+.popup-overlay.show,
+#wifiOverlay.show,
+#infoOverlay.show,
+#mapModal.show {
     display: flex;
     opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
 }
 
-.popup-overlay.show .popup {
-    transform: scale(1);
+.popup,
+.form-container,
+#mapModal .modal-content {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 450px;
+    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.2);
+    animation: fadeIn 0.3s ease-in-out;
+    position: relative;
 }
 
-/* Κλείσιμο κουμπιού */
-.close-btn {
+@keyframes fadeIn {
+    from {
+        transform: scale(0.9);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.close-btn,
+#mapModal .close {
     position: absolute;
     top: 10px;
     right: 15px;
-    font-size: 20px;
-    cursor: pointer;
+    font-size: 24px;
+    font-weight: bold;
     color: #555;
+    cursor: pointer;
 }
 
-/* ======= Βελτιωμένη μορφή της φόρμας ======= */
-.form-container {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
-    width: 100%; /* Καλύπτει όλο το modal */
-    max-width: 450px;
-    text-align: center;
-    box-sizing: border-box; /* Αποτρέπει το overflow */
-    animation: fadeIn 0.3s ease-in-out;
+.close-btn:hover,
+#mapModal .close:hover {
+    color: #000;
 }
-/* Κεντραρισμένα labels και input πεδία */
+
+/* ======= Inputs & Φόρμες ======= */
 .form-group {
     display: flex;
     flex-direction: column;
@@ -167,16 +173,14 @@ label {
     color: #333;
 }
 
-/* Βελτίωση των input πεδίων */
 input {
-    width: calc(100% - 20px); /* Μείωση του πλάτους για να μην ξεφεύγει */
-    max-width: 100%; /* Αποφυγή overflow */
+    width: 100%;
     padding: 12px;
     border: 1px solid #ccc;
     border-radius: 6px;
     font-size: 16px;
-    transition: border-color 0.3s ease-in-out;
     box-sizing: border-box;
+    transition: border-color 0.3s ease-in-out;
 }
 
 input:focus {
@@ -185,34 +189,14 @@ input:focus {
     box-shadow: 0px 0px 5px rgba(0, 123, 255, 0.5);
 }
 
-/* Animation κατά το άνοιγμα */
-@keyframes fadeIn {
-    from {
-        transform: scale(0.9);
-        opacity: 0;
-    }
-    to {
-        transform: scale(1);
-        opacity: 1;
-    }
-}
-
-/* ======= Βελτιωμένη μορφή για τα κουμπιά ======= */
-.form-actions {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 20px;
-}
-
 button {
-    flex: 1;
     padding: 12px;
     border: none;
     border-radius: 6px;
     font-size: 16px;
     font-weight: bold;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: background-color 0.3s ease;
     text-transform: uppercase;
     letter-spacing: 1px;
 }
@@ -220,322 +204,57 @@ button {
 button[type="submit"] {
     background-color: #007bff;
     color: white;
-    box-shadow: 0px 4px 6px rgba(0, 123, 255, 0.4);
 }
 
 button[type="submit"]:hover {
     background-color: #0056b3;
-    box-shadow: 0px 5px 10px rgba(0, 86, 179, 0.5);
 }
 
 button[type="button"] {
     background-color: #dc3545;
     color: white;
-    box-shadow: 0px 4px 6px rgba(220, 53, 69, 0.4);
 }
 
 button[type="button"]:hover {
     background-color: #a71d2a;
-    box-shadow: 0px 5px 10px rgba(167, 29, 42, 0.5);
 }
 
-/* Απόκρυψη της φόρμας Check-In από προεπιλογή */
-.popup-overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-}
-
-/* Popup επιβεβαίωσης */
-#confirmationOverlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 1000;
-    justify-content: center;
-    align-items: center;
-}
-
-/* Στυλ του confirmation box */
-#confirmationOverlay .popup {
-    background: white;
-    width: 90%;
-    max-width: 400px;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
-    text-align: center;
-}
-
-/* Κουμπιά μέσα στο popup επιβεβαίωσης */
-#confirmationOverlay .form-actions {
+.form-actions {
     display: flex;
     justify-content: space-between;
+    gap: 10px;
     margin-top: 20px;
 }
 
-#confirmationOverlay button {
-    flex: 1;
-    padding: 12px;
-    border: none;
-    border-radius: 6px;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-#confirmationOverlay button:first-child {
-    background-color: #007bff;
-    color: white;
-}
-
-#confirmationOverlay button:first-child:hover {
-    background-color: #0056b3;
-}
-
-#confirmationOverlay button:last-child {
-    background-color: #dc3545;
-    color: white;
-}
-
-#confirmationOverlay button:last-child:hover {
-    background-color: #a71d2a;
-}
-#checkinBox {
-    min-width: 140px;
-    text-align: center;
-}
-
-/* Στυλ για το κουμπί του Χάρτη */
-#mapBtn {
-  background-color: #ff5a5f; /* Κόκκινο Airbnb */
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  padding: 12px 20px;
-  margin: 5px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background 0.3s ease, transform 0.2s ease;
-}
-#mapBtn:hover {
-  background-color: #e04e50;
-  transform: translateY(-2px);
-}
-#mapBtn:active {
-  transform: scale(0.98);
-}
-
-/* Στυλ για το overlay του Χάρτη (modal) */
-#mapModal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  visibility: hidden;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s ease;
-}
-
-/* Όταν το modal είναι ενεργό */
-#mapModal.show {
-  visibility: visible;
-  opacity: 1;
-  pointer-events: auto;
-}
-
-/* Στυλ για το περιεχόμενο του modal */
-#mapModal .modal-content {
-  background: #fff;
-  border-radius: 8px;
-  padding: 20px;
-  max-width: 500px;
-  width: 90%;
-  margin: 100px auto;
-  position: relative;
-  transform: translateY(-20px);
-  transition: transform 0.3s ease;
-}
-#mapModal.show .modal-content {
-  transform: translateY(0);
-}
-
-/* Κουμπί κλεισίματος */
-#mapModal .close {
-  position: absolute;
-  top: 10px;
-  right: 15px;
-  font-size: 28px;
-  font-weight: bold;
-  color: #333;
-  cursor: pointer;
-}
-#mapModal .close:hover {
-  color: #000;
-}
-
-/* Στυλ για το iframe του Google Maps */
+/* ======= Google Maps iframe ======= */
 #mapModal iframe {
-  width: 100%;
-  border: none;
-  border-radius: 5px;
-  margin: 10px 0;
-}
-
-/* Στυλ για το κουμπί Οδηγίες */
-#directionsBtn {
-  display: block;
-  width: 100%;
-  padding: 12px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background 0.3s;
-}
-#directionsBtn:hover {
-  background-color: #0056b3;
-}
-
-/* Responsive design */
-@media (max-width: 600px) {
-  #mapBtn {
-    font-size: 14px;
-    padding: 10px 16px;
-  }
-  #mapModal .modal-content {
-    margin: 50px auto;
-    width: 95%;
-  }
-}
-
-/* ===== WiFi Modal ===== */
-#wifiOverlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
     width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    opacity: 0;
-    transition: opacity 0.3s ease-in-out;
+    border: none;
+    border-radius: 5px;
+    margin: 10px 0;
 }
 
-#wifiOverlay.show {
-    display: flex;
-    opacity: 1;
-}
-
-#wifiOverlay .form-container {
-    background: white;
-    padding: 25px;
-    border-radius: 12px;
-    width: 90%;
-    max-width: 450px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-    position: relative;
-    animation: fadeIn 0.3s ease-in-out;
-}
-
-#wifiOverlay .close-btn {
-    position: absolute;
-    top: 10px;
-    right: 15px;
-    font-size: 24px;
-    font-weight: bold;
-    color: #555;
-    cursor: pointer;
-}
-
-#wifiOverlay .form-actions {
-    display: flex;
-    justify-content: flex-end;
-    margin-top: 20px;
-}
-
-#wifiOverlay button#copyWifiBtn {
-    margin-top: 10px;
-    padding: 10px 15px;
+#directionsBtn {
+    width: 100%;
+    padding: 12px;
     background-color: #007bff;
     color: white;
     border: none;
     border-radius: 5px;
-    font-weight: bold;
     cursor: pointer;
-    transition: background-color 0.3s ease;
 }
 
-#wifiOverlay button#copyWifiBtn:hover {
+#directionsBtn:hover {
     background-color: #0056b3;
 }
 
-/* ===== Info Modal ===== */
-#infoOverlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    opacity: 0;
-    transition: opacity 0.3s ease-in-out;
+/* ======= Responsive Design ======= */
+@media (max-width: 600px) {
+    .box {
+        width: 100px;
+        height: 50px;
+        font-size: 14px;
+    }
 }
 
-#infoOverlay.show {
-    display: flex;
-    opacity: 1;
-}
-
-#infoOverlay .form-container {
-    background: white;
-    padding: 25px;
-    border-radius: 12px;
-    width: 90%;
-    max-width: 450px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-    position: relative;
-    animation: fadeIn 0.3s ease-in-out;
-}
-
-#infoOverlay .close-btn {
-    position: absolute;
-    top: 10px;
-    right: 15px;
-    font-size: 24px;
-    font-weight: bold;
-    color: #555;
-    cursor: pointer;
-}
-
-#infoOverlay .form-actions {
-    display: flex;
-    justify-content: flex-end;
-    margin-top: 20px;
-}
 
