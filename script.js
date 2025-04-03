@@ -13,6 +13,8 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 
+
+
 // ==========================
 // ΑΝΟΙΓΜΑ & ΚΛΕΙΣΙΜΟ ΦΟΡΜΑΣ CHECK-IN
 // ==========================
@@ -229,3 +231,120 @@ function showInfo(type) {
 function closeInfoForm() {
     infoOverlay.classList.remove("show");
 }
+
+function setLanguage(lang) {
+    localStorage.setItem('preferred_language', lang);
+    applyLanguage(lang);
+    document.getElementById('languagePopup').classList.remove('show');
+}
+
+
+function applyLanguage(lang) {
+    const translations = {
+        el: {
+            checkin: "Check-In",
+            wifi: "WiFi",
+            map: "Χάρτης",
+            other: "Άλλα",
+            name: "Ονοματεπώνυμο",
+            passport: "Αριθμός Διαβατηρίου",
+            nationality: "Εθνικότητα",
+            arrival: "Ημερομηνία & Ώρα Άφιξης",
+            submit: "Υποβολή",
+            cancel: "Άκυρο",
+            wifiTitle: "Στοιχεία WiFi",
+            wifiName: "Όνομα Δικτύου",
+            wifiPass: "Κωδικός",
+            wifiCopy: "ΑΝΤΙΓΡΑΦΗ",
+            wifiClose: "ΚΛΕΙΣΙΜΟ"
+           
+        },
+        en: {
+            checkin: "Check-In",
+            wifi: "WiFi",
+            map: "Map",
+            other: "Other",
+            name: "Full Name",
+            passport: "Passport Number",
+            nationality: "Nationality",
+            arrival: "Arrival Date & Time",
+            submit: "Submit",
+            cancel: "Cancel",
+            wifiTitle: "WiFi Info",
+            wifiName: "Network Name",
+            wifiPass: "Password",
+            wifiCopy: "COPY",
+            wifiClose: "CLOSE"
+            
+
+        },
+        fr: {
+            checkin: "Enregistrement",
+            wifi: "WiFi",
+            map: "Carte",
+            other: "Autres",
+            name: "Nom complet",
+            passport: "Numéro de passeport",
+            nationality: "Nationalité",
+            arrival: "Date & Heure d'arrivée",
+            submit: "Soumettre",
+            cancel: "Annuler",
+            wifiTitle: "Infos WiFi",
+            wifiName: "Nom du réseau",
+            wifiPass: "Mot de passe",
+            wifiCopy: "COPIER",
+            wifiClose: "FERMER"
+            
+
+        },
+        de: {
+            checkin: "Check-In",
+            wifi: "WiFi",
+            map: "Karte",
+            other: "Andere",
+            name: "Vollständiger Name",
+            passport: "Reisepassnummer",
+            nationality: "Staatsangehörigkeit",
+            arrival: "Ankunftsdatum & -uhrzeit",
+            submit: "Absenden",
+            cancel: "Abbrechen",
+            wifiTitle: "WiFi-Informationen",
+            wifiName: "Netzwerkname",
+            wifiPass: "Passwort",
+            wifiCopy: "KOPIEREN",
+            wifiClose: "SCHLIESSEN"
+            
+
+        }
+    };
+
+    const t = translations[lang];
+
+    // Κουμπιά
+    document.querySelectorAll(".box")[1].querySelector("span").innerText = t.wifi;
+    document.querySelectorAll(".box")[2].querySelector("span").innerText = t.map;
+    document.querySelectorAll(".box")[3].querySelector("span").innerText = t.other;
+
+    // Check-in labels
+    document.querySelector("label[for='fullName']").innerText = t.name;
+    document.querySelector("label[for='passportNumber']").innerText = t.passport;
+    document.querySelector("label[for='nationality']").innerText = t.nationality;
+    document.querySelector("label[for='arrivalTime']").innerText = t.arrival;
+
+    // Check-in buttons
+    document.querySelector("#checkinForm button[type='submit']").innerText = t.submit;
+    document.querySelector("#checkinForm button[type='button']").innerText = t.cancel;
+
+    // ✅ WiFi Modal
+    document.querySelector("#wifiOverlay h2").innerText = t.wifiTitle;
+    document.querySelector("label[for='wifiName']").innerText = t.wifiName;
+    document.querySelector("label[for='wifiPassword']").innerText = t.wifiPass;
+    document.getElementById("copyWifiBtn").innerText = t.wifiCopy;
+    document.querySelector("#wifiOverlay .form-actions button").innerText = t.wifiClose;
+}
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    const savedLang = localStorage.getItem('preferredLanguage') || 'el';
+    applyLanguage(savedLang);
+});

@@ -257,4 +257,92 @@ button[type="button"]:hover {
     }
 }
 
+/* ======== Flatpickr Airbnb-Style Customization ======== */
+.flatpickr-calendar {
+    font-family: 'Arial', sans-serif;
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+}
 
+.flatpickr-months {
+    background-color: #ff5a5f; /* Airbnb red */
+    color: white;
+}
+
+.flatpickr-months .flatpickr-prev-month,
+.flatpickr-months .flatpickr-next-month {
+    color: white;
+    opacity: 0.8;
+}
+
+.flatpickr-weekday {
+    background-color: #ffecec;
+    color: #ff5a5f;
+    font-weight: bold;
+}
+
+.flatpickr-day {
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.flatpickr-day:hover {
+    background-color: #ffecec;
+    color: #ff5a5f;
+}
+
+.flatpickr-day.today {
+    border: 2px solid #ff5a5f;
+    font-weight: bold;
+}
+
+.flatpickr-day.selected {
+    background-color: #ff5a5f !important;
+    color: white !important;
+}
+
+.flatpickr-time {
+    border-top: 1px solid #eee;
+    padding-top: 8px;
+    background: #fff;
+}
+
+.flatpickr-time input {
+    font-size: 16px;
+    padding: 6px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    width: 60px;
+    text-align: center;
+}
+
+.note {
+    font-size: 13px;
+    color: #555;
+    margin-top: 5px;
+    display: block;
+    font-style: italic;
+}
+
+.flag-row {
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+  margin-top: 20px;
+}
+
+.flag-row img {
+  width: 50px;
+  height: 35px;
+  object-fit: cover;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+
+.flag-row img:hover {
+  transform: scale(1.1);
+}

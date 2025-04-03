@@ -67,6 +67,8 @@
                 <div class="form-group">
                     <label for="arrivalTime">Ημερομηνία & Ώρα Άφιξης</label>
                     <input type="datetime-local" id="arrivalTime" name="arrivalTime" required>
+                    <small class="note">* Το ωράριο Check-In είναι από τις 15:00 της μιας ημέρας έως τις 14:59 της επόμενης.</small>
+
                 </div>
                 <div class="form-actions">
                     <button type="submit">Υποβολή</button>
@@ -148,6 +150,28 @@
         </div>
     </div>
 </div>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  body {
+    font-family: 'Inter', sans-serif;
+  }
+</style>
+<!-- Popup Επιλογής Γλώσσας -->
+<div id="languagePopup" class="popup-overlay show">
+  <div class="popup">
+    <h3 style="text-align: center;">Language</h3>
+    <div class="flag-row">
+      <div onclick="setLanguage('el')"><img src="https://flagcdn.com/w40/gr.png" alt="Greek"></div>
+      <div onclick="setLanguage('en')"><img src="https://flagcdn.com/w40/gb.png" alt="English"></div>
+      <div onclick="setLanguage('fr')"><img src="https://flagcdn.com/w40/fr.png" alt="French"></div>
+      <div onclick="setLanguage('de')"><img src="https://flagcdn.com/w40/de.png" alt="German"></div>
+    </div>
+  </div>
+</div>
+
+
+
+
 
 
     
@@ -156,4 +180,3 @@
 
 </body>
 </html>
-
