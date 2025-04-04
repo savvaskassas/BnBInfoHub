@@ -3,39 +3,36 @@ let countdownInterval;
 // ==========================
 // Ενεργοποίηση του Flatpickr στο πεδίο ημερομηνίας και ώρας
 // ==========================
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
     flatpickr("#arrivalTime", {
         enableTime: true,
         dateFormat: "Y-m-d H:i",
         minDate: "today",
         time_24hr: true,
-        locale: "el" // Ελληνική γλώσσα
+        locale: "el"
     });
+
+    const savedLang = localStorage.getItem('preferredLanguage') || 'el';
+    applyLanguage(savedLang);
 });
-
-
 
 // ==========================
 // ΑΝΟΙΓΜΑ & ΚΛΕΙΣΙΜΟ ΦΟΡΜΑΣ CHECK-IN
 // ==========================
-
-// Εμφάνιση της φόρμας Check-In μόνο όταν πατηθεί το κουμπί
 function openCheckinForm() {
     let overlay = document.getElementById('formOverlay');
     overlay.classList.add('show');
 }
 
-// Κλείσιμο της φόρμας Check-In
 function closeForm() {
-    let overlay = document.getElementById('formOverlay');
-    overlay.classList.remove('show');
+    document.getElementById('formOverlay').classList.remove('show');
 }
 
 // ==========================
-// Υποβολή Check-In με Αντίστροφη Μέτρηση & Locker Code
+// Υποβολή Check-In
 // ==========================
 function submitForm(event) {
-    event.preventDefault(); // Αποτρέπουμε την άμεση υποβολή
+    event.preventDefault();
 
     const fullName = document.getElementById('fullName').value.trim();
     const passportNumber = document.getElementById('passportNumber').value.trim();
@@ -47,37 +44,26 @@ function submitForm(event) {
         return;
     }
 
-    // Μετατροπή της εισαγόμενης ημερομηνίας σε αντικείμενο Date
     const arrivalTime = new Date(arrivalTimeInput);
     const currentTime = new Date();
+    const countdownEndTime = new Date(arrivalTime.getTime() - 30 * 60000);
 
-    // Υπολογισμός της ώρας που το countdown πρέπει να σταματήσει (30 λεπτά πριν την άφιξη)
-    const countdownEndTime = new Date(arrivalTime.getTime() - 30 * 60000); // Αφαίρεση 30 λεπτών
-
-    // Έλεγχος αν η επιλεγμένη ώρα είναι έγκυρη (πρέπει να είναι τουλάχιστον 30 λεπτά μετά από τώρα)
     if (currentTime >= countdownEndTime) {
         alert("❌ Η ώρα άφιξης πρέπει να είναι τουλάχιστον 30 λεπτά μετά από τώρα.");
         return;
     }
 
-    // Αλλαγή εμφάνισης του κουμπιού Check-In
     const checkinBox = document.getElementById('checkinBox');
-    checkinBox.style.backgroundColor = "#28a745"; // Πράσινο χρώμα
+    checkinBox.style.backgroundColor = "#28a745";
     checkinBox.style.fontSize = "18px";
-    checkinBox.style.pointerEvents = "none"; // Απενεργοποίηση του κουμπιού
+    checkinBox.style.pointerEvents = "none";
 
-    // Ξεκινά η αντίστροφη μέτρηση
     startCountdown(checkinBox, countdownEndTime);
-
-    // Κλείσιμο της φόρμας
     closeForm();
 }
 
-// ==========================
-// Συνάρτηση Αντίστροφης Μέτρησης & Locker Code
-// ==========================
 function startCountdown(buttonElement, endTime) {
-    clearInterval(countdownInterval); // Διακοπή παλιότερης μέτρησης αν υπάρχει
+    clearInterval(countdownInterval);
 
     function updateCountdown() {
         const now = new Date();
@@ -86,158 +72,112 @@ function startCountdown(buttonElement, endTime) {
         if (timeRemaining <= 0) {
             clearInterval(countdownInterval);
             buttonElement.innerHTML = `<i class="fas fa-lock"></i> <span>Κωδικός: <b>1234</b></span>`;
-            buttonElement.style.backgroundColor = "#ff5733"; // Πορτοκαλί χρώμα για να ξεχωρίζει
+            buttonElement.style.backgroundColor = "#ff5733";
             return;
         }
 
-        // Υπολογισμός ωρών, λεπτών, δευτερολέπτων
         const hours = Math.floor(timeRemaining / (1000 * 60 * 60));
         const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
         const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
-
-        // Ενημέρωση του κουμπιού με τον χρόνο που απομένει
         buttonElement.innerHTML = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
     }
 
-    // Κλήση της συνάρτησης κάθε 1 δευτερόλεπτο
     updateCountdown();
     countdownInterval = setInterval(updateCountdown, 1000);
 }
 
-// Συνδέουμε την υποβολή φόρμας με το submitForm()
 document.getElementById("checkinForm").addEventListener("submit", submitForm);
 
 // ==========================
 // ΑΝΟΙΓΜΑ VIBER & WHATSAPP
 // ==========================
-
-// Άνοιγμα συνομιλίας Viber
 function openViber() {
     window.location.href = "viber://chat?number=+123456789";
 }
-
-// Άνοιγμα συνομιλίας WhatsApp
 function openWhatsApp() {
     window.location.href = "https://wa.me/123456789";
 }
 
 // ==========================
-// ΓΕΝΙΚΕΣ ΛΕΙΤΟΥΡΓΙΕΣ
+// MODAL: Χάρτης
 // ==========================
-
-// Κλείσιμο του modal αν γίνει κλικ εκτός
-window.onclick = function(event) {
-    if (event.target.classList.contains('popup-overlay')) {
-        closeForm();
-    }
-};
-
-// Επιλογή στοιχείων από το DOM
-const mapBtn       = document.getElementById('mapBtn');
-const mapModal     = document.getElementById('mapModal');
+const mapBtn = document.getElementById('mapBtn');
+const mapModal = document.getElementById('mapModal');
 const directionsBtn = document.getElementById('directionsBtn');
 const closeButtons = mapModal.querySelector('.close');
 
-// Συναρτήσεις για άνοιγμα και κλείσιμο του Χάρτη
 function openMapModal() {
-  mapModal.classList.add('show');
+    mapModal.classList.add('show');
 }
 function closeMapModal() {
-  mapModal.classList.remove('show');
+    mapModal.classList.remove('show');
 }
-
-// Άνοιγμα του modal όταν πατηθεί το κουμπί "Χάρτης"
 mapBtn.addEventListener('click', openMapModal);
-
-// Κλείσιμο modal όταν πατηθεί το "X"
 closeButtons.addEventListener('click', closeMapModal);
-
-// Κλείσιμο όταν γίνει κλικ εκτός του modal
 mapModal.addEventListener('click', (e) => {
-  if (e.target === mapModal) {
-    closeMapModal();
-  }
+    if (e.target === mapModal) closeMapModal();
 });
-
-// Λειτουργία για το κουμπί "Οδηγίες Πλοήγησης"
 directionsBtn.addEventListener('click', () => {
-  // Προσπάθεια λήψης τοποθεσίας του χρήστη
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(position => {
-      const lat = position.coords.latitude;
-      const lon = position.coords.longitude;
-      // Άνοιγμα Google Maps με οδηγίες από την τρέχουσα τοποθεσία προς το Σύνταγμα, Αθήνα
-      window.open(`https://www.google.com/maps/dir/?api=1&origin=${lat},${lon}&destination=Σύνταγμα,+Αθήνα`);
-    }, () => {
-      // Αν δεν επιτραπεί η τοποθεσία, ανοίγει απλά ο χάρτης για τον προορισμό
-      window.open(`https://www.google.com/maps/dir/?api=1&destination=Σύνταγμα,+Αθήνα`);
-    });
-  } else {
-    // Αν η γεωτοποθεσία δεν υποστηρίζεται, ανοίγει απλά ο χάρτης με τον προορισμό
-    window.open(`https://www.google.com/maps/dir/?api=1&destination=Σύνταγμα,+Αθήνα`);
-  }
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(position => {
+            const lat = position.coords.latitude;
+            const lon = position.coords.longitude;
+            window.open(`https://www.google.com/maps/dir/?api=1&origin=${lat},${lon}&destination=Σύνταγμα,+Αθήνα`);
+        }, () => {
+            window.open(`https://www.google.com/maps/dir/?api=1&destination=Σύνταγμα,+Αθήνα`);
+        });
+    } else {
+        window.open(`https://www.google.com/maps/dir/?api=1&destination=Σύνταγμα,+Αθήνα`);
+    }
 });
 
 // ==========================
-// ΛΕΙΤΟΥΡΓΙΑ MODAL WIFI
+// MODAL: WiFi
 // ==========================
-
 const wifiOverlay = document.getElementById("wifiOverlay");
 const wifiPasswordInput = document.getElementById("wifiPassword");
 const copyWifiBtn = document.getElementById("copyWifiBtn");
 
-// Άνοιγμα όταν πατηθεί το κουμπί WiFi
 function showInfo(type) {
     if (type === "wifi") {
         wifiOverlay.classList.add("show");
+    } else if (type === "other") {
+        infoOverlay.classList.add("show");
     }
 }
 
-// Κλείσιμο WiFi Modal
 function closeWifiForm() {
     wifiOverlay.classList.remove("show");
 }
 
-// Αντιγραφή WiFi Κωδικού
 copyWifiBtn.addEventListener("click", () => {
-    navigator.clipboard.writeText(wifiPasswordInput.value)
-        .then(() => {
-            copyWifiBtn.textContent = "Αντιγράφηκε!";
-            setTimeout(() => {
-                copyWifiBtn.textContent = "Αντιγραφή";
-            }, 2000);
-        })
-        .catch(err => {
-            console.error("Σφάλμα αντιγραφής: ", err);
-        });
+    navigator.clipboard.writeText(wifiPasswordInput.value).then(() => {
+        copyWifiBtn.textContent = "Αντιγράφηκε!";
+        setTimeout(() => {
+            copyWifiBtn.textContent = "Αντιγραφή";
+        }, 2000);
+    }).catch(err => {
+        console.error("Σφάλμα αντιγραφής: ", err);
+    });
 });
 
 // ==========================
-// ΛΕΙΤΟΥΡΓΙΑ MODAL ΓΙΑ ΑΛΛΕΣ ΠΛΗΡΟΦΟΡΙΕΣ
+// MODAL: Άλλες Πληροφορίες
 // ==========================
-
 const infoOverlay = document.getElementById("infoOverlay");
 
-// Άνοιγμα όταν πατηθεί το κουμπί "Άλλα"
-function showInfo(type) {
-    if (type === "other") {
-        infoOverlay.classList.add("show");
-    } else if (type === "wifi") {
-        wifiOverlay.classList.add("show");
-    }
-}
-
-// Κλείσιμο του modal πληροφοριών
 function closeInfoForm() {
     infoOverlay.classList.remove("show");
 }
 
+// ==========================
+// ΠΟΛΥΓΛΩΣΣΙΑ
+// ==========================
 function setLanguage(lang) {
-    localStorage.setItem('preferred_language', lang);
+    localStorage.setItem('preferredLanguage', lang);
     applyLanguage(lang);
     document.getElementById('languagePopup').classList.remove('show');
 }
-
 
 function applyLanguage(lang) {
     const translations = {
@@ -256,8 +196,11 @@ function applyLanguage(lang) {
             wifiName: "Όνομα Δικτύου",
             wifiPass: "Κωδικός",
             wifiCopy: "ΑΝΤΙΓΡΑΦΗ",
-            wifiClose: "ΚΛΕΙΣΙΜΟ"
-           
+            wifiClose: "ΚΛΕΙΣΙΜΟ",
+            placeholderName: "Π.χ. Ιωάννης Παπαδόπουλος",
+            placeholderPassport: "Π.χ. ΑΒ1234567",
+            placeholderNationality: "Π.χ. Ελληνική",
+            arrivalNote: "Διαθέσιμη ώρα άφιξης: από 15:00 έως 14:59 της επόμενης ημέρας"
         },
         en: {
             checkin: "Check-In",
@@ -274,9 +217,11 @@ function applyLanguage(lang) {
             wifiName: "Network Name",
             wifiPass: "Password",
             wifiCopy: "COPY",
-            wifiClose: "CLOSE"
-            
-
+            wifiClose: "CLOSE",
+            placeholderName: "e.g. John Papadopoulos",
+            placeholderPassport: "e.g. AB1234567",
+            placeholderNationality: "e.g. Greek",
+            arrivalNote: "Available check-in time: from 15:00 to 14:59 of the next day"
         },
         fr: {
             checkin: "Enregistrement",
@@ -293,9 +238,11 @@ function applyLanguage(lang) {
             wifiName: "Nom du réseau",
             wifiPass: "Mot de passe",
             wifiCopy: "COPIER",
-            wifiClose: "FERMER"
-            
-
+            wifiClose: "FERMER",
+            placeholderName: "ex. Jean Papadopoulos",
+            placeholderPassport: "ex. AB1234567",
+            placeholderNationality: "ex. Grecque",
+            arrivalNote: "Heure d'arrivée disponible : de 15:00 à 14:59 le lendemain"
         },
         de: {
             checkin: "Check-In",
@@ -305,46 +252,47 @@ function applyLanguage(lang) {
             name: "Vollständiger Name",
             passport: "Reisepassnummer",
             nationality: "Staatsangehörigkeit",
-            arrival: "Ankunftsdatum & -uhrzeit",
+            arrival: "Ankunftsdatum & -zeit",
             submit: "Absenden",
             cancel: "Abbrechen",
             wifiTitle: "WiFi-Informationen",
             wifiName: "Netzwerkname",
             wifiPass: "Passwort",
             wifiCopy: "KOPIEREN",
-            wifiClose: "SCHLIESSEN"
-            
-
+            wifiClose: "SCHLIESSEN",
+            placeholderName: "z.B. Johann Papadopoulos",
+            placeholderPassport: "z.B. AB1234567",
+            placeholderNationality: "z.B. Griechisch",
+            arrivalNote: "Verfügbare Check-in-Zeit: von 15:00 bis 14:59 am nächsten Tag"
         }
     };
 
     const t = translations[lang];
 
-    // Κουμπιά
     document.querySelectorAll(".box")[1].querySelector("span").innerText = t.wifi;
     document.querySelectorAll(".box")[2].querySelector("span").innerText = t.map;
     document.querySelectorAll(".box")[3].querySelector("span").innerText = t.other;
 
-    // Check-in labels
     document.querySelector("label[for='fullName']").innerText = t.name;
     document.querySelector("label[for='passportNumber']").innerText = t.passport;
     document.querySelector("label[for='nationality']").innerText = t.nationality;
     document.querySelector("label[for='arrivalTime']").innerText = t.arrival;
 
-    // Check-in buttons
     document.querySelector("#checkinForm button[type='submit']").innerText = t.submit;
     document.querySelector("#checkinForm button[type='button']").innerText = t.cancel;
 
-    // ✅ WiFi Modal
     document.querySelector("#wifiOverlay h2").innerText = t.wifiTitle;
     document.querySelector("label[for='wifiName']").innerText = t.wifiName;
     document.querySelector("label[for='wifiPassword']").innerText = t.wifiPass;
     document.getElementById("copyWifiBtn").innerText = t.wifiCopy;
     document.querySelector("#wifiOverlay .form-actions button").innerText = t.wifiClose;
+
+    // Νέα: Placeholder
+    document.getElementById('fullName').placeholder = t.placeholderName;
+    document.getElementById('passportNumber').placeholder = t.placeholderPassport;
+    document.getElementById('nationality').placeholder = t.placeholderNationality;
+
+    // Νέα: Note κάτω από arrival
+    const noteElement = document.getElementById('arrivalNote');
+    if (noteElement) noteElement.innerText = t.arrivalNote;
 }
-
-
-document.addEventListener("DOMContentLoaded", function () {
-    const savedLang = localStorage.getItem('preferredLanguage') || 'el';
-    applyLanguage(savedLang);
-});
