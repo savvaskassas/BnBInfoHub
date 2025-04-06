@@ -132,11 +132,12 @@ directionsBtn.addEventListener('click', () => {
 });
 
 // ==========================
-// MODAL: WiFi
+// MODAL: WiFi & Άλλες Πληροφορίες
 // ==========================
 const wifiOverlay = document.getElementById("wifiOverlay");
 const wifiPasswordInput = document.getElementById("wifiPassword");
 const copyWifiBtn = document.getElementById("copyWifiBtn");
+const infoOverlay = document.getElementById("infoOverlay");
 
 function showInfo(type) {
     if (type === "wifi") {
@@ -145,11 +146,12 @@ function showInfo(type) {
         infoOverlay.classList.add("show");
     }
 }
-
 function closeWifiForm() {
     wifiOverlay.classList.remove("show");
 }
-
+function closeInfoForm() {
+    infoOverlay.classList.remove("show");
+}
 copyWifiBtn.addEventListener("click", () => {
     navigator.clipboard.writeText(wifiPasswordInput.value).then(() => {
         copyWifiBtn.textContent = "Αντιγράφηκε!";
@@ -160,15 +162,6 @@ copyWifiBtn.addEventListener("click", () => {
         console.error("Σφάλμα αντιγραφής: ", err);
     });
 });
-
-// ==========================
-// MODAL: Άλλες Πληροφορίες
-// ==========================
-const infoOverlay = document.getElementById("infoOverlay");
-
-function closeInfoForm() {
-    infoOverlay.classList.remove("show");
-}
 
 // ==========================
 // ΠΟΛΥΓΛΩΣΣΙΑ
@@ -182,6 +175,7 @@ function setLanguage(lang) {
 function applyLanguage(lang) {
     const translations = {
         el: {
+            formTitle: "Στοιχεία Check-In",
             checkin: "Check-In",
             wifi: "WiFi",
             map: "Χάρτης",
@@ -200,9 +194,10 @@ function applyLanguage(lang) {
             placeholderName: "Π.χ. Ιωάννης Παπαδόπουλος",
             placeholderPassport: "Π.χ. ΑΒ1234567",
             placeholderNationality: "Π.χ. Ελληνική",
-            arrivalNote: "Διαθέσιμη ώρα άφιξης: από 15:00 έως 14:59 της επόμενης ημέρας"
+            arrivalNote: "* Το ωράριο Check-In είναι από τις 15:00 της μιας ημέρας έως τις 14:59 της επόμενης."
         },
         en: {
+            formTitle: "Check-In Info",
             checkin: "Check-In",
             wifi: "WiFi",
             map: "Map",
@@ -221,9 +216,10 @@ function applyLanguage(lang) {
             placeholderName: "e.g. John Papadopoulos",
             placeholderPassport: "e.g. AB1234567",
             placeholderNationality: "e.g. Greek",
-            arrivalNote: "Available check-in time: from 15:00 to 14:59 of the next day"
+            arrivalNote: "* Check-in time is available from 15:00 of the arrival day until 14:59 of the next day."
         },
         fr: {
+            formTitle: "Informations Check-In",
             checkin: "Enregistrement",
             wifi: "WiFi",
             map: "Carte",
@@ -242,9 +238,10 @@ function applyLanguage(lang) {
             placeholderName: "ex. Jean Papadopoulos",
             placeholderPassport: "ex. AB1234567",
             placeholderNationality: "ex. Grecque",
-            arrivalNote: "Heure d'arrivée disponible : de 15:00 à 14:59 le lendemain"
+            arrivalNote: "* L'heure d'arrivée est disponible de 15h00 jusqu'à 14h59 le lendemain."
         },
         de: {
+            formTitle: "Check-In Informationen",
             checkin: "Check-In",
             wifi: "WiFi",
             map: "Karte",
@@ -263,16 +260,19 @@ function applyLanguage(lang) {
             placeholderName: "z.B. Johann Papadopoulos",
             placeholderPassport: "z.B. AB1234567",
             placeholderNationality: "z.B. Griechisch",
-            arrivalNote: "Verfügbare Check-in-Zeit: von 15:00 bis 14:59 am nächsten Tag"
+            arrivalNote: "* Die Check-In-Zeit ist von 15:00 Uhr bis 14:59 Uhr am nächsten Tag verfügbar."
         }
     };
 
     const t = translations[lang];
 
+    // Ενημέρωση κουμπιών
     document.querySelectorAll(".box")[1].querySelector("span").innerText = t.wifi;
     document.querySelectorAll(".box")[2].querySelector("span").innerText = t.map;
     document.querySelectorAll(".box")[3].querySelector("span").innerText = t.other;
 
+    // Check-In Form
+    document.querySelector("#formOverlay h2").innerText = t.formTitle;
     document.querySelector("label[for='fullName']").innerText = t.name;
     document.querySelector("label[for='passportNumber']").innerText = t.passport;
     document.querySelector("label[for='nationality']").innerText = t.nationality;
@@ -281,18 +281,17 @@ function applyLanguage(lang) {
     document.querySelector("#checkinForm button[type='submit']").innerText = t.submit;
     document.querySelector("#checkinForm button[type='button']").innerText = t.cancel;
 
+    document.getElementById('fullName').placeholder = t.placeholderName;
+    document.getElementById('passportNumber').placeholder = t.placeholderPassport;
+    document.getElementById('nationality').placeholder = t.placeholderNationality;
+
+    const noteElement = document.getElementById("arrivalNote");
+    if (noteElement) noteElement.innerText = t.arrivalNote;
+
+    // WiFi Modal
     document.querySelector("#wifiOverlay h2").innerText = t.wifiTitle;
     document.querySelector("label[for='wifiName']").innerText = t.wifiName;
     document.querySelector("label[for='wifiPassword']").innerText = t.wifiPass;
     document.getElementById("copyWifiBtn").innerText = t.wifiCopy;
     document.querySelector("#wifiOverlay .form-actions button").innerText = t.wifiClose;
-
-    // Νέα: Placeholder
-    document.getElementById('fullName').placeholder = t.placeholderName;
-    document.getElementById('passportNumber').placeholder = t.placeholderPassport;
-    document.getElementById('nationality').placeholder = t.placeholderNationality;
-
-    // Νέα: Note κάτω από arrival
-    const noteElement = document.getElementById('arrivalNote');
-    if (noteElement) noteElement.innerText = t.arrivalNote;
 }
