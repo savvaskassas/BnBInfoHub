@@ -95,8 +95,9 @@ function openViber() {
     window.location.href = "viber://chat?number=+123456789";
 }
 function openWhatsApp() {
-    window.location.href = "https://wa.me/123456789";
+    window.location.href = "whatsapp://send?phone=306972009094";
 }
+
 
 // ==========================
 // MODAL: Χάρτης
