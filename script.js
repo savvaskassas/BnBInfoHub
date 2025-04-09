@@ -119,18 +119,22 @@ mapModal.addEventListener('click', (e) => {
     if (e.target === mapModal) closeMapModal();
 });
 directionsBtn.addEventListener('click', () => {
+    const destLat = 36.4481064171205;
+    const destLng = 28.223163717687097;
+
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(position => {
-            const lat = position.coords.latitude;
-            const lon = position.coords.longitude;
-            window.open(`https://www.google.com/maps/dir/?api=1&origin=${lat},${lon}&destination=Σύνταγμα,+Αθήνα`);
+            const originLat = position.coords.latitude;
+            const originLng = position.coords.longitude;
+            window.open(`https://www.google.com/maps/dir/?api=1&origin=${originLat},${originLng}&destination=${destLat},${destLng}`);
         }, () => {
-            window.open(`https://www.google.com/maps/dir/?api=1&destination=Σύνταγμα,+Αθήνα`);
+            window.open(`https://www.google.com/maps/dir/?api=1&destination=${destLat},${destLng}`);
         });
     } else {
-        window.open(`https://www.google.com/maps/dir/?api=1&destination=Σύνταγμα,+Αθήνα`);
+        window.open(`https://www.google.com/maps/dir/?api=1&destination=${destLat},${destLng}`);
     }
 });
+
 
 // ==========================
 // MODAL: WiFi & Άλλες Πληροφορίες
@@ -296,3 +300,4 @@ function applyLanguage(lang) {
     document.getElementById("copyWifiBtn").innerText = t.wifiCopy;
     document.querySelector("#wifiOverlay .form-actions button").innerText = t.wifiClose;
 }
+   
