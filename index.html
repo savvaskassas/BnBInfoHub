@@ -11,17 +11,25 @@
 <body>
 
     <div class="container">
+     <div style="text-align: center;">
+        <small id="countdownNote" class="note" style="display: none;">
+            Ο κωδικός του locker θα εμφανιστεί αφού τελειώσει η αντίστροφη μέτρηση.
+        </small>
+    </div>
+
         <!-- Πρώτη σειρά κουμπιών -->
-        <div class="button-row">
-            <div class="box" id="checkinBox" onclick="openCheckinForm()">
-                <i class="fas fa-calendar-check"></i>
-                <span>Check-In</span>
-            </div>
-            <div class="box" onclick="showInfo('wifi')">
-                <i class="fas fa-wifi"></i>
-                <span>WiFi</span>
-            </div>
-        </div>
+       <div class="button-row">
+
+  <div class="box" id="checkinBox" onclick="openCheckinForm()">
+    <i class="fas fa-calendar-check"></i>
+    <span>Check-In</span>
+  </div>
+
+  <div class="box" onclick="showInfo('wifi')">
+    <i class="fas fa-wifi"></i>
+    <span>WiFi</span>
+  </div>
+</div>
 
         <!-- Δεύτερη σειρά κουμπιών -->
         <div class="button-row">

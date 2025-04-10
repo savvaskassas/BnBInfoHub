@@ -57,6 +57,9 @@ function submitForm(event) {
     checkinBox.style.backgroundColor = "#28a745";
     checkinBox.style.fontSize = "18px";
     checkinBox.style.pointerEvents = "none";
+    
+    document.getElementById('countdownNote').style.display = "block";
+
 
     startCountdown(checkinBox, countdownEndTime);
     closeForm();
@@ -199,7 +202,8 @@ function applyLanguage(lang) {
             placeholderName: "Π.χ. Ιωάννης Παπαδόπουλος",
             placeholderPassport: "Π.χ. ΑΒ1234567",
             placeholderNationality: "Π.χ. Ελληνική",
-            arrivalNote: "* Το ωράριο Check-In είναι από τις 15:00 της μιας ημέρας έως τις 14:59 της επόμενης."
+            arrivalNote: "* Το ωράριο Check-In είναι από τις 15:00 της μιας ημέρας έως τις 14:59 της επόμενης.",
+            lockerNote: "Ο κωδικός του locker θα εμφανιστεί αφού τελειώσει η αντίστροφη μέτρηση."
         },
         en: {
             formTitle: "Check-In Info",
@@ -221,7 +225,8 @@ function applyLanguage(lang) {
             placeholderName: "e.g. John Papadopoulos",
             placeholderPassport: "e.g. AB1234567",
             placeholderNationality: "e.g. Greek",
-            arrivalNote: "* Check-in time is available from 15:00 of the arrival day until 14:59 of the next day."
+            arrivalNote: "* Check-in time is available from 15:00 of the arrival day until 14:59 of the next day.",
+            lockerNote: "The locker code will appear after the countdown ends."
         },
         fr: {
             formTitle: "Informations Check-In",
@@ -243,7 +248,8 @@ function applyLanguage(lang) {
             placeholderName: "ex. Jean Papadopoulos",
             placeholderPassport: "ex. AB1234567",
             placeholderNationality: "ex. Grecque",
-            arrivalNote: "* L'heure d'arrivée est disponible de 15h00 jusqu'à 14h59 le lendemain."
+            arrivalNote: "* L'heure d'arrivée est disponible de 15h00 jusqu'à 14h59 le lendemain.",
+            lockerNote: "Le code du casier s'affichera une fois le compte à rebours terminé."
         },
         de: {
             formTitle: "Check-In Informationen",
@@ -265,7 +271,8 @@ function applyLanguage(lang) {
             placeholderName: "z.B. Johann Papadopoulos",
             placeholderPassport: "z.B. AB1234567",
             placeholderNationality: "z.B. Griechisch",
-            arrivalNote: "* Die Check-In-Zeit ist von 15:00 Uhr bis 14:59 Uhr am nächsten Tag verfügbar."
+            arrivalNote: "* Die Check-In-Zeit ist von 15:00 Uhr bis 14:59 Uhr am nächsten Tag verfügbar.",
+            lockerNote: "Der Schließfachcode erscheint, sobald der Countdown endet."
         }
     };
 
@@ -293,6 +300,9 @@ function applyLanguage(lang) {
     const noteElement = document.getElementById("arrivalNote");
     if (noteElement) noteElement.innerText = t.arrivalNote;
 
+    const lockerNote = document.getElementById("countdownNote");
+    if (lockerNote) lockerNote.innerText = t.lockerNote;
+
     // WiFi Modal
     document.querySelector("#wifiOverlay h2").innerText = t.wifiTitle;
     document.querySelector("label[for='wifiName']").innerText = t.wifiName;
@@ -300,4 +310,4 @@ function applyLanguage(lang) {
     document.getElementById("copyWifiBtn").innerText = t.wifiCopy;
     document.querySelector("#wifiOverlay .form-actions button").innerText = t.wifiClose;
 }
-   
+
