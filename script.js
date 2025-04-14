@@ -310,4 +310,5 @@ function applyLanguage(lang) {
     document.getElementById("copyWifiBtn").innerText = t.wifiCopy;
     document.querySelector("#wifiOverlay .form-actions button").innerText = t.wifiClose;
 }
+   
 

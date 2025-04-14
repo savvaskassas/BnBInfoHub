@@ -81,6 +81,15 @@ body {
     background-color: #3a058c;
 }
 
+.bottom-left-button.viber {
+    background-color: #665CAC; /* Κλασικό μοβ Viber */
+}
+
+.bottom-left-button.viber:hover {
+    background-color: #4e4485;
+}
+
+
 .bottom-right-button {
     right: 20px;
     background-color: #1da851;
