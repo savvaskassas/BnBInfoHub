@@ -17,9 +17,8 @@ A web application designed for **Airbnb hosts** to provide all necessary **guest
 
 ## 🚀 How It Works:
 1. Guests access the app and see an interface with **Check-In, WiFi, Map, and Info buttons**.  
-2. When a guest **schedules their check-in time**, the **"Key Code" button unlocks** at the specified time.  
-3. The host **automatically receives an SMS notification** via Twilio when a check-in is scheduled.  
-4. Guests can also access **WiFi details**, **Google Maps directions**, and **other property information**.  
+2. When a guest **schedules their check-in time**, the **"Key Code" button unlocks** at the specified time.    
+3. Guests can also access **WiFi details**, **Google Maps directions**, and **other property information**.  
 
 ## 🛠 Installation Guide:
 ### 1️⃣ Clone the repository:
