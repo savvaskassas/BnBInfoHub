@@ -60,9 +60,4 @@ cd Airbnb-Guest-Info-App
 - [ ] Store check-in data persistently
 - [ ] Add authentication for hosts/guests
 
----
-## 🛠 Installation Guide:
-### 1️⃣ Clone the repository:
-```sh
-git clone https://github.com/YOUR_USERNAME/Airbnb-Guest-Info-App.git
-cd Airbnb-Guest-Info-App
+
